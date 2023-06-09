@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { newItemSchema, NewItemInput } from "./newItem.schema";
+import ItemDetail from "./itemDetail";
 import "./App.css";
 
 function App() {
@@ -11,27 +12,70 @@ function App() {
     formState: { errors },
   } = useForm<NewItemInput>({
     resolver: zodResolver(newItemSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      dob: new Date(),
-      contactNumber: 0,
-      unitNumber: "",
-      streetAddress: "",
-      postCode: "",
-      state: "",
-    },
+    defaultValues: {},
   });
+
+  const [userCategory, setUserCategory] = useState<string[]>([]);
+  const [categoryError, setCategoryError] = useState<string>("");
+
+  type hanldeFunction = (value: string) => void;
+
+  const addCategory: hanldeFunction = (value) => {
+    let categories = [...userCategory];
+
+    let check = categories.filter((category) => category === value);
+
+    if (check.length === 0) {
+      categories.push(value);
+      setCategoryError("");
+    }
+    setUserCategory(categories);
+
+    console.log("added", categories);
+  };
+
+  const removeCategory: hanldeFunction = (value) => {
+    let categories = [...userCategory];
+    if (categories.length === 0) {
+      setCategoryError("Select at least one category");
+    }
+    if (categories.length > 0) {
+      let check = categories.filter((category) => category !== value);
+      setUserCategory(check);
+      console.log("removed", check);
+    }
+  };
+
+  type item = {
+    name: string;
+  };
+
+  const items: item[] = [
+    { name: "Developer" },
+    { name: "Business Analysist" },
+    { name: "System Administrator" },
+    { name: "Student" },
+    { name: "Organization" },
+    { name: "IT Manager" },
+  ];
+
+  const onSubmit = (data: any) => {
+    if (userCategory.length === 0) {
+      setCategoryError("Select at least one category");
+      return;
+    }
+    data.categories = userCategory;
+    console.log(data);
+  };
 
   return (
     <div className="App">
       <header className="App__header">User Registration</header>
 
       <section className="App__form">
-        <form onSubmit={handleSubmit((d) => console.log(d))}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="input__field">
-            <label htmlFor="name">First name</label>
+            <label htmlFor="firstName">First name</label>
             <input
               id="firstName"
               placeholder=""
@@ -44,7 +88,7 @@ function App() {
           </div>
 
           <div className="input__field">
-            <label htmlFor="name">Last name</label>
+            <label htmlFor="lastName">Last name</label>
             <input
               id="lastName"
               placeholder="Your answer"
@@ -71,7 +115,7 @@ function App() {
           </div>
 
           <div className="input__field">
-            <label htmlFor="email">Date of birth</label>
+            <label htmlFor="dob">Date of birth</label>
             <input
               id="dob"
               type="date"
@@ -84,7 +128,7 @@ function App() {
           </div>
 
           <div className="input__field">
-            <label htmlFor="email">Contact number</label>
+            <label htmlFor="contactNumber">Contact number</label>
             <div
               style={{
                 display: "flex",
@@ -98,16 +142,17 @@ function App() {
                   backgroundColor: "#fff",
                   marginTop: ".5rem",
                   color: "gray",
+                  width: "6rem",
                 }}
               >
-                +61-
+                +61 -
               </div>
               <input
                 id="contactNumber"
                 type="number"
                 className="input__field--number"
                 placeholder="XXXXXXXXXX"
-                {...register("dob", { valueAsDate: true })}
+                {...register("contactNumber", { valueAsNumber: true })}
               />
             </div>
 
@@ -119,7 +164,7 @@ function App() {
           </div>
 
           <div className="input__field" style={{ marginBottom: "0" }}>
-            <label htmlFor="email">Address</label>
+            <label htmlFor="address">Address</label>
             <input
               id="unitNumber"
               type="text"
@@ -174,7 +219,7 @@ function App() {
                 className="input__field--select"
                 {...register("state")}
               >
-                <option value=""></option>
+                <option value="">Select State</option>
                 <option value="ACT">ACT</option>
                 <option value="NSW">NSW</option>
                 <option value="NT">NT</option>
@@ -184,7 +229,29 @@ function App() {
                 <option value="TAS">TAS</option>
                 <option value="WA">WA</option>
               </select>
+              {errors?.state?.message && (
+                <p className="input__field--error">{errors.state.message}</p>
+              )}
             </div>
+          </div>
+
+          <div className="input__field">
+            <label htmlFor="address">Category</label>
+            <div style={{ padding: "0.3rem 0" }}>
+              {items.map((item, index) => {
+                return (
+                  <ItemDetail
+                    key={index}
+                    item={item}
+                    addCategory={addCategory}
+                    removeCategory={removeCategory}
+                  />
+                );
+              })}
+            </div>
+            {categoryError && (
+              <p className="input__field--error">{categoryError}</p>
+            )}
           </div>
 
           <button type="submit" className="form__button">

@@ -1,5 +1,7 @@
 import { number, string, object, TypeOf, date } from "zod";
 
+const today = new Date();
+
 export const newItemSchema = object({
   firstName: string()
     .nonempty("First name is required")
@@ -9,13 +11,20 @@ export const newItemSchema = object({
     .nonempty("Last name is required")
     .min(2, { message: "Must be 2 characters or more" }),
 
-  email: string().email().nonempty(),
+  email: string()
+    .email({ message: "Email is invalid" })
+    .nonempty("Email is required"),
 
-  dob: date().refine((value) => !value, "Date of birth is required"),
+  dob: date().max(
+    new Date(today.getFullYear() - 18, today.getMonth(), today.getDate()),
+    "Date of birth must be 18 years ago"
+  ),
 
-  contactNumber: number()
-    .min(100000000, "Contact number is not valid")
-    .refine((value) => !value, "Contact number is required"),
+  contactNumber: number({
+    invalid_type_error: "Contact number is required",
+  }).refine((value) => value > 400000000 && value < 500000000, {
+    message: "Contact number is invalid",
+  }),
 
   unitNumber: string().optional(),
 
