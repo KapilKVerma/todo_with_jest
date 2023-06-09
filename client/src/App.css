@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+.App {
+  padding: 3rem;
+}
+
+.App__header {
+  margin: 0 auto;
+  width: 500px;
+  border-radius: 5px;
+  padding: 2rem;
+  text-align: center;
+  background-color: rgba(59, 104, 194, 1);
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.App__form {
+  margin: 0 auto;
+  width: 500px;
+  border-radius: 5px;
+  padding: 2rem;
+  background-color: rgba(59, 104, 194, 0.25);
+  color: white;
+  font-size: 1.25rem;
+}
+
+.input__field {
+  color: black;
+  margin-bottom: 1rem;
+}
+
+.input__field--text {
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 1.25rem;
+}
+
+.input__field--email {
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 1.25rem;
+}
+
+.input__field--number {
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 1.25rem;
+}
+
+.input__field--select {
+  width: 100%;
+  padding: 0.45rem 1rem;
+  margin-top: 0.5rem;
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 1.25rem;
+}
+
+.input__field--error {
+  color: red;
+}
+
+.form__button {
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+  background-color: rgb(36, 186, 59);
+  border: none;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 1px #888888;
+  cursor: pointer;
+}
