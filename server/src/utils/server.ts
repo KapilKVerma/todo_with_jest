@@ -12,7 +12,7 @@ function createSever() {
   app.use(morgan("dev"));
 
   // Routes
-  app.use("/api/0.1", routes);
+  app.use("/api", routes);
 
   return app;
 }
